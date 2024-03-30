@@ -7,13 +7,6 @@ else
 	echo "directory /logs already exists"
 fi
 
-if [ ! -d ./data ];then
-	mkdir ./data
-	echo "creating /data directory"
-else
-	echo "directory /data already exists"
-fi
-
 if [ ! -d ./logs/matter ];then
 	mkdir ./logs/matter
 	echo "creating /logs/matter directory"
