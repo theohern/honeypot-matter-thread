@@ -9,6 +9,14 @@ getHALog :
 	@chmod +x ./scripts/getHALog.sh
 	@./scripts/getHALog.sh
 
+getAllLogs :
+	@echo "retreiving all the logs of the matter-server container"
+	@chmod +x ./scripts/getMatterLog.sh
+	@./scripts/getMatterLog.sh
+	@echo "retreiving all the logs of the homeassistant container"
+	@chmod +x ./scripts/getHALog.sh
+	@./scripts/getHALog.sh
+
 install :
 	@echo "installing the honeypot environment"
 	@chmod +x ./scripts/install.sh
