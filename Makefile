@@ -28,4 +28,4 @@ clean :
 	@./scripts/clean.sh
 
 back-up :
-	@tar -cvf ./back-ups/back-up$(shell date -d "now"  +"%Y-%m-%d-h%Hm%Ms%S").tar ./data ./logs > /dev/null
+	@tar -cvf ./back-ups/back-up$(shell date -d "now"  +"%Y-%m-%d-h%Hm%Ms%S").tar ./logs ./src ./scripts note Makefile > /dev/null

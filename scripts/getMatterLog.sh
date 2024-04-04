@@ -1,6 +1,4 @@
 #! /bin/bash
 
-docker logs matter-server 2> matterLogs > MatterOutputLogs
-mv matterLogs ./logs/matter
-mv MatterOutputLogs ./logs/matter
+docker logs -f matter-server 2> ./logs/matter/matterLogs > ./logs/matter/MatterOutputLogs
 echo "Matter logs has been written to '\logs\matter' directory"
