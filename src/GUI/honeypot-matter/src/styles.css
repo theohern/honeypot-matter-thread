@@ -8,15 +8,24 @@
   .topLeft {
     top: 0;
     left: 0;
+    width: 49.9%;
+    height: 49.9%;
   }
   
   .topRight {
     top: 0;
     right: 0;
+    width: 49.9%;
+    height: 49.9%;
   }
   
   .bottom {
     bottom: 0;
     left: 0;
     width: 100%;
+    height : 49.9%;
+  }
+
+  .background{
+    background-color: rgb(58, 79, 79);
   }

@@ -1,6 +1,8 @@
+from flask import Flask, send_file
 import docker
 import re
-import time
+
+app = Flask(__name__)
 
 def stream_docker_logs(container_name):
     client = docker.from_env()
@@ -17,7 +19,6 @@ def stream_docker_logs(container_name):
 def process_log_entry(log_entry, change_counts):
     match = re.search(r'friendly_name=([^@,]+)', log_entry)
     if match:
-        friendly_name = match.group(1).strip()
         old_state_match = re.search(r'old_state=<state [^=]+=([^;]+);', log_entry)
         old_state = old_state_match.group(1) if old_state_match else None
         new_state_match = re.search(r'new_state=<state [^=]+=([^;]+);', log_entry)
@@ -37,9 +38,13 @@ def count_changes(log_entry, change_counts, state_changed):
 
 def save_change_counts_to_file(change_counts):
     with open("csv/count_changes.csv", 'w') as f:
-        f.write("Friendly Name,Change Count,state Change Count\n")
+        f.write("Friendly Name,Change Count\n")
         for friendly_name, count in change_counts.items():
             f.write(f"{friendly_name},{count}\n")
+
+@app.route('/get_homeassistant')
+def get_csv():
+    return send_file("csv/count_changes.csv", as_attachment=True)
 
 if __name__ == "__main__":
     stream_docker_logs('homeassistant')

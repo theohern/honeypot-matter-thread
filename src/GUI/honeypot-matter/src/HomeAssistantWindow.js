@@ -1,38 +1,56 @@
-import React, { useState } from 'react';
-import CSVReader from 'react-csv-reader';
+import React, { useState, useEffect } from 'react';
+import './styles.css';
 
 const HomeAssistantWindow = () => {
-  const [csvData, setCsvData] = useState([]);
+  /* const [csvData, setCsvData] = useState([]);
 
-  const handleFile = (data) => {
-    setCsvData(data);
-  };
+  useEffect(() => {
+    fetch('/get_homeassistant')  // Assuming Flask server is running on the same host
+      .then(response => response.text())
+      .then(data => {
+        const parsedData = parseCsv(data);
+        setCsvData(parsedData);
+      })
+      .catch(error => {
+        console.error('Error fetching CSV:', error);
+      });
+  }, []);
+
+  const parseCsv = (csv) => {
+    const rows = csv.trim().split('\n');
+    const headers = rows[0].split(',');
+    const parsedData = rows.slice(1).map(row => {
+      const rowData = row.split(',');
+      return headers.reduce((obj, header, index) => {
+        obj[header.trim()] = rowData[index].trim();
+        return obj;
+      }, {});
+    });
+    return parsedData;
+  }; */
+
 
   return (
-    <div className="window homeassistant">
+    <div className="embedded topRight background">
       <strong>This is the Homeassistant Window</strong>
-      <CSVReader
-        onFileLoaded={handleFile}    
-        parserOptions={{ header: true, skipEmptyLines: true }}
-      />
-      <table>
+      {/* <table>
         <thead>
           <tr>
-            <th>Friendly Name</th>
-            <th>Change Count</th>
-            <th>State Change Count</th>
+            {Object.keys(csvData[0]).map((key, index) => (
+              <th key={index}>{key}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {csvData.map((item, index) => (
+          {csvData.map((row, index) => (
             <tr key={index}>
-              <td>{item['Friendly Name']}</td>
-              <td>{item['Change Count']}</td>
-              <td>{item['State Change Count']}</td>
+              {Object.values(row).map((value, index) => (
+                <td key={index}>{value}</td>
+              ))}
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
     </div>
   );
 };
