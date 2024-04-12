@@ -1,6 +1,8 @@
 import docker
 import re
 
+index = 0
+
 def ArrayToString(tab):
     string = ""
     for elem in tab :
@@ -20,6 +22,7 @@ def stream_docker_logs(container_name):
         print("Cleanup complete. Exiting script.")
 
 def process_log_entry(log_entry, change_counts):
+    global index
     log_entry = re.sub(r'\x1B\[[0-9;]*m', '', log_entry)
     match = re.search(r'friendly_name=([^@,]+)', log_entry)
     if match:
@@ -28,8 +31,9 @@ def process_log_entry(log_entry, change_counts):
             SplitedLog = log_entry.split(' ', 5)
             data = []
             friendly_name = match.group(1).strip()
+            data.append(index)
             data.append(friendly_name)
-            data.append(SplitedLog[0] + ' ' + SplitedLog[1].split(':', 2)[0] + ':' + SplitedLog[1].split(':', 2)[1])
+            data.append(SplitedLog[0] + ' ' + SplitedLog[1].split(':', 2)[0] + ':' + SplitedLog[1].split(':', 2)[1] + ':00')
             data.append(SplitedLog[2])
             data.append(SplitedLog[3])
             data.append(SplitedLog[4])
@@ -43,9 +47,10 @@ def process_log_entry(log_entry, change_counts):
             
             count_changes(log_entry, change_counts, state_changed, data)
             save_change_counts_to_file(change_counts)
+            index += 1
 
 def count_changes(log_entry, change_counts, state_changed, data):
-    excluded_words = ["Sun", "theophile", "Ledoug", "SM-A137F", "Google", "achats"]
+    excluded_words = ["Sun", "theophile", "Ledoug", "SM-A137F", "Google", "achats", "Doug"]
 
     friendly_name_match = re.search(r'friendly_name=([^@,]+)', log_entry)
     if friendly_name_match:
@@ -69,5 +74,5 @@ def save_change_counts_to_file(change_counts):
 
 if __name__ == "__main__":
     with open("/usr/share/grafana/csv/ha_log_entries.csv", 'w') as f:
-        f.write("Friendly Name\ttimestamp\tloglevel\tthread\tnamespace\tmessage\n")
+        f.write("ID\tFriendly Name\ttimestamp\tloglevel\tthread\tnamespace\tmessage\n")
     stream_docker_logs('homeassistant')

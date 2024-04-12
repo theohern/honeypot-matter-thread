@@ -1,6 +1,8 @@
 import docker
 import re
 
+index = 0
+
 def ArrayToString(tab):
     string = ""
     for elem in tab :
@@ -18,12 +20,14 @@ def stream_docker_logs(container_name):
         print("Cleanup complete. Exiting script.")
 
 def process_log_entry(log_entry):
+    global index
     log_entry = re.sub(r'\x1B\[[0-9;]*m', '', log_entry)
     good_match = re.search(r'\bhomeassistant\.core\b', log_entry)
     if good_match:
         SplitedLog = log_entry.split(' ', 5)
         data = []
-        data.append(SplitedLog[0] + ' ' + SplitedLog[1].split(':', 2)[0] + ':' + SplitedLog[1].split(':', 2)[1])
+        data.append(index)
+        data.append(SplitedLog[0] + ' ' + SplitedLog[1].split(':', 2)[0] + ':' + SplitedLog[1].split(':', 2)[1] + ':00')
         data.append(SplitedLog[2])
         data.append(SplitedLog[3])
         data.append(SplitedLog[4])
@@ -34,5 +38,5 @@ def process_log_entry(log_entry):
 
 if __name__ == "__main__":
     with open("/usr/share/grafana/csv/ha_all_logs.csv", 'w') as f:
-        f.write("timestamp\tloglevel\tthread\tnamespace\tmessage\n")
+        f.write("ID\ttimestamp\tloglevel\tthread\tnamespace\tmessage\n")
     stream_docker_logs('homeassistant')
