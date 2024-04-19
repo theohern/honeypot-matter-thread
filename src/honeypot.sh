@@ -8,6 +8,6 @@ python3 -m http.server --bind localhost 9999 &
 
 python3 $dir/homeassistant/main.py &
 
-python3 $dir/homeassistant/all_logs.py &
+python3 $dir/matter/main.py &
 
-python3 $dir/matter/main.py
+python3 $dir/stat.py
