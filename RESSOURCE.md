@@ -112,3 +112,11 @@ You can check everythink is ok with the command
 ``` bash
 sudo systemctl status grafana
 ```
+
+## KVM 
+Install via those command 
+``` bash
+sudo apt install qemu-system libvirt-clients livirt-deamon-system virt-manager
+sudo adduser <USERNAME> libvirt 
+sudo reboot
+```
