@@ -1,20 +1,8 @@
-#!/bin/bash
+#! /bin/bash
 
-apk add tshark
+tshark -i enp0s18 -f "tcp port 5580" -w websocket.pcap &
 
-INTERFACE="7" 
-
-FILTER="tcp port 5580"
-
-OUTPUT_FILE="/usr/share/grafana/csv/websocket.csv"
-
-tshark -i "$INTERFACE" -f "$FILTER" -T fields \
-    -e _ws.col.Time \
-    -e ip.src \
-    -e tcp.srcport \
-    -e ip.dst \
-    -e tcp.dstport \
-    -e _ws.col.Protocol \
-    -e _ws.col.Info \
-    -E header=y -E separator=, > "$OUTPUT_FILE"
-
+while (true); do
+	sleep 10
+	tshark -r websocket.pcap -Y 'http.request.method == "GET"' > websocket.txt
+done

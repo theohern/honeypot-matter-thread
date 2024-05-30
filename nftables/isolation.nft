@@ -1,0 +1,21 @@
+#!/usr/sbin/nft -f
+
+
+
+flush ruleset
+
+table inet filter {
+	chain input {
+		type filter hook input priority 0; policy accept;
+        ip saddr 192.168.1.29 tcp dport 22 log prefix "SSH TO INSIDE: " flags all
+	}
+	chain forward {
+		type filter hook forward priority 0; policy accept;
+        ip saddr 192.168.1.29 tcp dport 22 drop
+	}
+	chain output {
+		type filter hook output priority 0; policy accept;
+        ip saddr 192.168.1.29 tcp dport 22 log prefix "SSH TO OUTSIDE: " flags all
+	}
+}
+
