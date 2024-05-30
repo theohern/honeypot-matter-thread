@@ -1,4 +1,4 @@
-dir="/usr/share/grafana/csv/"
+dir="/usr/share/grafana/csv"
 
 touch $dir/count_changes.csv
 chmod 777 $dir/count_changes.csv
@@ -26,3 +26,9 @@ chmod 777 $dir/subscription.csv
 
 touch $dir/entity_log_entries.csv
 chmod 777 $dir/entity_log_entries.csv
+
+touch $dir/threadLogs.csv
+chmod 777 $dir/threadLogs.csv
+
+touch $dir/thread_node_activity.csv
+chmod 777 $dir/thread_node_activity.csv

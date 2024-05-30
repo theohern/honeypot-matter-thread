@@ -47,13 +47,13 @@ if __name__ == "__main__":
     
     csv_ha = "/usr/share/grafana/csv/homeassistant-stat.csv"
 
-    if not os.path.exists(csv_matter):
+    if os.path.getsize(csv_matter) == 0:
         with open(csv_matter, 'w') as f:
             writer = csv.writer(f)
             writer.writerow(["Time", "CPU", "RAM", "Mem"])
 
+    if os.path.getsize(csv_ha) == 0:
 
-    if not os.path.exists(csv_ha):
         with open(csv_ha, 'w') as f:
             writer = csv.writer(f)
             writer.writerow(["Time", "CPU", "RAM", "Mem"])

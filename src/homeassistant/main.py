@@ -50,7 +50,10 @@ def process_log_entry(log_entry, change_counts):
             index += 1
 
         entity_match = re.search(r'entity_id=([^@,]+)', log_entry)
+        excluded_entities = ["Sun", "theophile", "Ledoug", "SM-A137F", "Google", "achats", "Doug", "b_box", "vsx", "sun"]
         if entity_match:
+            if any(word in entity_match.group(1).split() for word in excluded_entities):
+                return
             SplitedLog = log_entry.split(' ', 5)
             data_entity = []
             entity_name = entity_match.group(1).strip()
@@ -78,7 +81,7 @@ def process_log_entry(log_entry, change_counts):
             f.write(ArrayToString(data)+'\n')
 
 def count_changes(log_entry, change_counts, state_changed, data):
-    excluded_words = ["Sun", "theophile", "Ledoug", "SM-A137F", "Google", "achats", "Doug"]
+    excluded_words = ["Sun", "theophile", "Ledoug", "SM-A137F", "Google", "achats", "Doug", "b-box", "VSX-2021", "sun"]
 
     friendly_name_match = re.search(r'friendly_name=([^@,]+)', log_entry)
     if friendly_name_match:
@@ -103,4 +106,8 @@ def save_change_counts_to_file(change_counts):
 if __name__ == "__main__":
     with open("/usr/share/grafana/csv/ha_log_entries.csv", 'w') as f:
         f.write("ID\tFriendly Name\ttimestamp\tloglevel\tthread\tnamespace\tmessage\n")
+    with open("/usr/share/grafana/csv/ha_all_logs.csv", 'w') as f:
+        f.write("ID\ttimestamp\tloglevel\tthread\tnamespace\tmessage\n")
+    with open("/usr/share/grafana/csv/entity_log_entries.csv", 'w') as f:
+        f.write("ID\tentity Name\ttimestamp\tloglevel\tthread\tnamespace\tmessage\n")
     stream_docker_logs('homeassistant')
