@@ -2,6 +2,11 @@ import docker
 import re
 import os 
 import time
+import csv
+from parsing import matter_server
+from parsing import chip
+from parsing import storage
+
 allTab = []
 
 def stream_docker_logs(container_name):
@@ -21,28 +26,51 @@ def stream_docker_logs(container_name):
         print("Cleanup complete. Exiting script.")
 
 def process_log_entry(string):
+    string = string.rstrip('\n')
+    string = string.replace(",", ";")
     tab = string.split(' ',5)
     if tab[4].startswith("[chip.native"):
-        pass
+        with open("csv/chip.csv", "a") as fchip:
+            writer = csv.writer(fchip)
+            writer.writerow(tab)
+        chip.parse(tab)
     elif tab[4].startswith("[matter_server.server"):
-        pass
+        with open("csv/matter_server.csv", "a") as fmatter:
+            writer = csv.writer(fmatter)
+            writer.writerow(tab)
+        matter_server.parse(tab)
     elif tab[4].startswith("[PersistentStorage]"):
-        pass
+        with open("csv/storage.csv", "a") as fstor:
+            writer = csv.writer(fstor)
+            writer.writerow(tab)
+        storage.parse(tab)
     elif tab[4].startswith("[CertificateAuthority"):
-        pass
+        with open("csv/certif.csv", "a") as fcert:
+            writer = csv.writer(fcert)
+            writer.writerow(tab)
     elif tab[4].startswith("[aiorun]"):
-        pass
+        with open("csv/aiorun.csv", "a") as faio:
+            writer = csv.writer(faio)
+            writer.writerow(tab)
     elif tab[4].startswith("[asyncio]"):
-        pass
+        with open("csv/asyncio.csv", "a") as fasyn:
+            writer = csv.writer(fasyn)
+            writer.writerow(tab)
     elif tab[4].startswith("[zeroconf]"):
-        pass
+        with open("csv/zeroconf.csv", "a") as fzer:
+            writer = csv.writer(fzer)
+            writer.writerow(tab)
     elif tab[4].startswith("[FabricAdmin]"):
-        pass
+        with open("csv/fabric.csv", "a") as ffab:
+            writer = csv.writer(ffab)
+            writer.writerow(tab)
     elif tab[4].startswith("[root]"):
-        pass
+        with open("csv/root.csv", "a") as froot:
+            writer = csv.writer(froot)
+            writer.writerow(tab)
     else:
         if tab[4] not in allTab:
-            with open("file.txt", "a") as f:
+            with open("NotParse.txt", "a") as f:
                 f.write(tab[4])
 
 if __name__ == "__main__":
