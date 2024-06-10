@@ -24,7 +24,7 @@ def initFile(file):
     with open(file, "w") as f:
         f.write("Date, Thread, Type, Source, Info\n")
 
-def init():
+def initLogs():
     initFile("csv/allLogs.csv")
     initFile("csv/aiorun.csv")
     initFile("csv/asyncio.csv")
@@ -35,6 +35,32 @@ def init():
     initFile("csv/pyWarnings.csv")
     initFile("csv/storage.csv")
     initFile("csv/zeroconf.csv")
+
+def initCounts():
+    with open("csv/Source.csv", "w") as f:
+        f.write("Name, Count\n")
+    with open("csv/Type.csv", "w") as f:
+        f.write("Name, Count\n")
+    with open("csv/Thread.csv", "w") as f:
+        f.write("Name, Count\n")
+    
+
+def UpdateInc(file, name):
+    with open(file, mode='r', newline='') as f:
+        reader = csv.reader(f)
+        rows = list(reader)
+
+    verbose_exists = False
+    for row in rows:
+        if row[0] == name:
+            row[1] = str(int(row[1]) + 1)
+            verbose_exists = True
+    if not verbose_exists:
+        rows.append([name, "1"])
+
+    with open(file, mode='w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(rows)
 
 
 def stream_docker_logs(container_name):
@@ -65,6 +91,11 @@ def process_log_entry(string):
 
     # add the log in allLogs file
     TabInFile("csv/allLogs.csv", tab)
+
+    # Update Source and Thread
+    UpdateInc("csv/Thread.csv", tab[1].replace("(","").replace(")",""))
+    UpdateInc("csv/Type.csv", tab[2])
+    UpdateInc("csv/Source.csv", tab[3].split(".")[0].replace("[", "").replace("]", ""))
 
     if tab[3].startswith("[chip.native"):
         with open("csv/chip.csv", "a") as fchip:
@@ -115,5 +146,6 @@ def process_log_entry(string):
                 f.write(tab[3])
 
 if __name__ == "__main__":
-    init()
+    initLogs()
+    initCounts()
     stream_docker_logs('addon_core_matter_server')
