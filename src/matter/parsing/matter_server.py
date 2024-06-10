@@ -38,7 +38,13 @@ def parse(tab):
 
     # Helpers
     elif re.search(re.escape("helpers"), tab[4]):
-        if re.search(re.escape("Skip fetching certificates"), tab[5]):
+        if re.search(r"[sS]kip", tab[5]):
+            skip = True
+        elif re.search(r"[fF]etch", tab[5]):
+            skip = True
+        elif re.search(r"[wW]riting", tab[5]):
+            skip = True
+        elif re.search(r"[dD]ownloading", tab[5]):
             skip = True
         else :
             tab.append(NP)

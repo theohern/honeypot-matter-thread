@@ -68,6 +68,10 @@ def process_log_entry(string):
         with open("csv/root.csv", "a") as froot:
             writer = csv.writer(froot)
             writer.writerow(tab)
+    elif tab[4].startswith("[py.warnings]"):
+        with open("csv/pyWarnings.csv", "a") as froot:
+            writer = csv.writer(froot)
+            writer.writerow(tab)
     else:
         if tab[4] not in allTab:
             with open("NotParse.txt", "a") as f:
