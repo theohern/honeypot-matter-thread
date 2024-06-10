@@ -2,7 +2,7 @@ import re
 import csv
 import os
 
-NP = "NOT PARSED"
+NP = " NOT PARSED"
 
 def TabInFile(file, tab, Skip=False):
     if Skip:
@@ -22,7 +22,7 @@ def parse(tab):
         if re.search(re.escape("CHIP Controller Stack initialized."), tab[5]):
            pass 
         else:
-            tab.append(NP)
+           tab[5] = tab[5] + NP 
         TabInFile("resume.csv", tab)
 
     # SDK 
@@ -33,7 +33,7 @@ def parse(tab):
         elif re.search(re.escape("CHIP Device Controller Initialized"), tab[5]):
             pass
         else :
-            tab.append(NP)
+            tab[5] = tab[5] + NP           
         TabInFile("resume.csv", tab)
 
     # Helpers
@@ -47,7 +47,7 @@ def parse(tab):
         elif re.search(r"[dD]ownloading", tab[5]):
             skip = True
         else :
-            tab.append(NP)
+            tab[5] = tab[5] + NP
         TabInFile("resume.csv", tab, Skip=skip)
 
     # Storage
@@ -59,7 +59,7 @@ def parse(tab):
         elif re.search(re.escape("Saved data to persistent storage"), tab[5]):
             pass
         else :
-            tab.append(NP)
+            tab[5] = tab[5] + NP
         TabInFile("resume.csv", tab)
 
     # Vendor
@@ -75,7 +75,7 @@ def parse(tab):
         elif re.search(re.escape("Saving vendor info to storage."), tab[5]):
             pass
         else :
-            tab.append(NP)
+            tab[5] = tab[5] + NP
         TabInFile("resume.csv", tab)
 
     # Client Handler
@@ -89,7 +89,7 @@ def parse(tab):
         elif re.search(re.escape("Handling command start_listening"), tab[5]):
             pass
         else :
-            tab.append(NP)
+            tab[5] = tab[5] + NP
         TabInFile("resume.csv", tab, Skip=skip)
 
     # Device Controller
@@ -109,7 +109,7 @@ def parse(tab):
         elif re.search(re.escape("Node could not be discovered on the network; returning cached IP's"), tab[5]):
             skip = True
         else :
-            tab.append(NP)
+            tab[5] = tab[5] + NP
         TabInFile("resume.csv", tab, Skip=skip)
 
     # Server
@@ -121,7 +121,7 @@ def parse(tab):
         elif re.search(re.escape("Detected dashboard files"), tab[5]):
             tab[5] = "dashboard files detected for the Matter Server"
         else:
-            tab.append(NP)
+            tab[5] = tab[5] + NP
         TabInFile("resume.csv", tab)
 
     else :
