@@ -18,110 +18,110 @@ def parse(tab):
     skip = False
 
     # Stack 
-    if re.search(re.escape("stack"), tab[4]):
-        if re.search(re.escape("CHIP Controller Stack initialized."), tab[5]):
+    if re.search(re.escape("stack"), tab[3]):
+        if re.search(re.escape("CHIP Controller Stack initialized."), tab[4]):
            pass 
         else:
-           tab[5] = tab[5] + NP 
+           tab[4] = tab[4] + NP 
         TabInFile("resume.csv", tab)
 
     # SDK 
-    elif re.search(re.escape("sdk"), tab[4]):
+    elif re.search(re.escape("sdk"), tab[3]):
         # Initialization of device controller
-        if re.search(re.escape("CASE"), tab[5]):
+        if re.search(re.escape("CASE"), tab[4]):
             pass
-        elif re.search(re.escape("CHIP Device Controller Initialized"), tab[5]):
+        elif re.search(re.escape("CHIP Device Controller Initialized"), tab[4]):
             pass
         else :
-            tab[5] = tab[5] + NP           
+            tab[4] = tab[4] + NP           
         TabInFile("resume.csv", tab)
 
     # Helpers
-    elif re.search(re.escape("helpers"), tab[4]):
-        if re.search(r"[sS]kip", tab[5]):
+    elif re.search(re.escape("helpers"), tab[3]):
+        if re.search(r"[sS]kip", tab[4]):
             skip = True
-        elif re.search(r"[fF]etch", tab[5]):
+        elif re.search(r"[fF]etch", tab[4]):
             skip = True
-        elif re.search(r"[wW]riting", tab[5]):
+        elif re.search(r"[wW]riting", tab[4]):
             skip = True
-        elif re.search(r"[dD]ownloading", tab[5]):
+        elif re.search(r"[dD]ownloading", tab[4]):
             skip = True
         else :
-            tab[5] = tab[5] + NP
+            tab[4] = tab[4] + NP
         TabInFile("resume.csv", tab, Skip=skip)
 
     # Storage
-    elif re.search(re.escape("storage"), tab[4]):
-        if re.search(re.escape("Loading persistent settings from"), tab[5]):
+    elif re.search(re.escape("storage"), tab[3]):
+        if re.search(re.escape("Loading persistent settings from"), tab[4]):
             pass
-        elif re.search(re.escape("Started."), tab[5]):
+        elif re.search(re.escape("Started."), tab[4]):
             pass
-        elif re.search(re.escape("Saved data to persistent storage"), tab[5]):
+        elif re.search(re.escape("Saved data to persistent storage"), tab[4]):
             pass
         else :
-            tab[5] = tab[5] + NP
+            tab[4] = tab[4] + NP
         TabInFile("resume.csv", tab)
 
     # Vendor
-    elif re.search(re.escape("vendor_info"), tab[4]):
-        if re.search(re.escape("Loading vendor info from storage."), tab[5]):
+    elif re.search(re.escape("vendor_info"), tab[3]):
+        if re.search(re.escape("Loading vendor info from storage."), tab[4]):
             pass
-        elif re.search(re.escape("Loaded 200 vendors from storage."), tab[5]):
+        elif re.search(re.escape("Loaded 200 vendors from storage."), tab[4]):
             pass
-        elif re.search(re.escape("Fetching the latest vendor info from DCL."), tab[5]):
+        elif re.search(re.escape("Fetching the latest vendor info from DCL."), tab[4]):
             pass
-        elif re.search(re.escape("Fetched 198 vendors from DCL."), tab[5]):
+        elif re.search(re.escape("Fetched 198 vendors from DCL."), tab[4]):
             pass
-        elif re.search(re.escape("Saving vendor info to storage."), tab[5]):
+        elif re.search(re.escape("Saving vendor info to storage."), tab[4]):
             pass
         else :
-            tab[5] = tab[5] + NP
+            tab[4] = tab[4] + NP
         TabInFile("resume.csv", tab)
 
     # Client Handler
-    elif re.search(re.escape("client_handler"), tab[4]):
-        if re.search(re.escape("Connected from"), tab[5]):
+    elif re.search(re.escape("client_handler"), tab[3]):
+        if re.search(re.escape("Connected from"), tab[4]):
             pass
-        elif re.search(re.escape("Received: {"), tab[5]):
+        elif re.search(re.escape("Received: {"), tab[4]):
             skip = True
-        elif re.search(re.escape("Received CommandMessage("), tab[5]):
+        elif re.search(re.escape("Received CommandMessage("), tab[4]):
             pass
-        elif re.search(re.escape("Handling command start_listening"), tab[5]):
+        elif re.search(re.escape("Handling command start_listening"), tab[4]):
             pass
         else :
-            tab[5] = tab[5] + NP
+            tab[4] = tab[4] + NP
         TabInFile("resume.csv", tab, Skip=skip)
 
     # Device Controller
-    elif re.search(re.escape("device_controller"), tab[4]):
-        if re.search(re.escape("Loaded 5 nodes from stored configuration"), tab[5]):
+    elif re.search(re.escape("device_controller"), tab[3]):
+        if re.search(re.escape("Loaded 5 nodes from stored configuration"), tab[4]):
             pass
-        elif re.search(r"Node \d+ discovered on MDNS", tab[5]):
+        elif re.search(r"Node \d+ discovered on MDNS", tab[4]):
             pass
-        elif re.search(re.escape("Setting-up node..."), tab[5]):
+        elif re.search(re.escape("Setting-up node..."), tab[4]):
             pass
-        elif re.search(re.escape("Setting up attributes and events subscription."), tab[5]):
+        elif re.search(re.escape("Setting up attributes and events subscription."), tab[4]):
             pass
-        elif re.search(re.escape("Subscription succeeded with report interval [0; 60]"), tab[5]):
+        elif re.search(re.escape("Subscription succeeded with report interval [0; 60]"), tab[4]):
             pass
-        elif re.search(re.escape("Attribute updated:"), tab[5]):
+        elif re.search(re.escape("Attribute updated:"), tab[4]):
             skip = True
-        elif re.search(re.escape("Node could not be discovered on the network; returning cached IP's"), tab[5]):
+        elif re.search(re.escape("Node could not be discovered on the network; returning cached IP's"), tab[4]):
             skip = True
         else :
-            tab[5] = tab[5] + NP
+            tab[4] = tab[4] + NP
         TabInFile("resume.csv", tab, Skip=skip)
 
     # Server
-    elif re.search(re.escape(".server.server"), tab[4]):
-        if re.search(re.escape("Starting the Matter Server"), tab[5]):
+    elif re.search(re.escape(".server.server"), tab[3]):
+        if re.search(re.escape("Starting the Matter Server"), tab[4]):
             pass
-        elif re.search(re.escape("Webserver initialized"), tab[5]):
+        elif re.search(re.escape("Webserver initialized"), tab[4]):
             pass
-        elif re.search(re.escape("Detected dashboard files"), tab[5]):
-            tab[5] = "dashboard files detected for the Matter Server"
+        elif re.search(re.escape("Detected dashboard files"), tab[4]):
+            tab[4] = "dashboard files detected for the Matter Server"
         else:
-            tab[5] = tab[5] + NP
+            tab[4] = tab[4] + NP
         TabInFile("resume.csv", tab)
 
     else :
