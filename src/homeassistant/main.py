@@ -24,7 +24,23 @@ def stream_docker_logs(container_name):
 def process_log_entry(log_entry, change_counts):
     global index
     log_entry = re.sub(r'\x1B\[[0-9;]*m', '', log_entry)
+    connection_match = re.search(r'\[homeassistant\.components\.http\.ban\] Login attempt or request with invalid authentication from ([^\s]+) \(([^\)]+)\)', log_entry)
+    successful_connection = re.search(r'Auth ok', log_entry)
     good_match = re.search(r'\bhomeassistant\.core\b', log_entry)
+    if connection_match:
+        ip_address = connection_match.group(2)
+        host = connection_match.group(1)
+        SplitedLog = log_entry.split(' ', 5)
+        data_connection = [index, ip_address, host, SplitedLog[0] + ' ' + SplitedLog[1].split(':', 2)[0] + ':' + SplitedLog[1].split(':', 2)[1] + ':00', SplitedLog[2], SplitedLog[3], SplitedLog[4], SplitedLog[5]]
+        with open("/usr/share/grafana/csv/connection_attempts.csv", 'a') as f:
+            f.write(ArrayToString(data_connection) + '\n')
+    if successful_connection:
+        ip_address = 'unknown'
+        host = 'unknown'
+        SplitedLog = log_entry.split(' ', 5)
+        data_connection = [index, ip_address, host, SplitedLog[0] + ' ' + SplitedLog[1].split(':', 2)[0] + ':' + SplitedLog[1].split(':', 2)[1] + ':00', SplitedLog[2], SplitedLog[3], SplitedLog[4], SplitedLog[5]]
+        with open("/usr/share/grafana/csv/connection_attempts.csv", 'a') as f:
+            f.write(ArrayToString(data_connection) + '\n')
     if good_match:
         friendly_match = re.search(r'friendly_name=([^@,]+)', log_entry)
         if friendly_match:
@@ -110,4 +126,6 @@ if __name__ == "__main__":
         f.write("ID\ttimestamp\tloglevel\tthread\tnamespace\tmessage\n")
     with open("/usr/share/grafana/csv/entity_log_entries.csv", 'w') as f:
         f.write("ID\tentity Name\ttimestamp\tloglevel\tthread\tnamespace\tmessage\n")
+    with open("/usr/share/grafana/csv/connection_attempts.csv", 'w') as f:
+        f.write("ID\tIP Address\tHost\tTimestamp\tLog Level\tThread\tNamespace\tMessage\n")
     stream_docker_logs('homeassistant')

@@ -3,10 +3,11 @@ import csv
 import os
 
 NP = " NOT PARSED"
+prefix = "/usr/share/grafana/csv/"
 
 def TabInFile(file, tab, Skip=False):
     if Skip:
-        with open("bin.csv", "a") as f:
+        with open(prefix+"bin.csv", "a") as f:
             writer = csv.writer(f)
             writer.writerow(tab)
         return
@@ -23,7 +24,7 @@ def parse(tab):
            pass 
         else:
            tab[4] = tab[4] + NP 
-        TabInFile("resume.csv", tab)
+        TabInFile(prefix+"resume.csv", tab)
 
     # SDK 
     elif re.search(re.escape("sdk"), tab[3]):
@@ -34,7 +35,7 @@ def parse(tab):
             pass
         else :
             tab[4] = tab[4] + NP           
-        TabInFile("resume.csv", tab)
+        TabInFile(prefix+"resume.csv", tab)
 
     # Helpers
     elif re.search(re.escape("helpers"), tab[3]):
@@ -48,7 +49,7 @@ def parse(tab):
             skip = True
         else :
             tab[4] = tab[4] + NP
-        TabInFile("resume.csv", tab, Skip=skip)
+        TabInFile(prefix+"resume.csv", tab, Skip=skip)
 
     # Storage
     elif re.search(re.escape("storage"), tab[3]):
@@ -60,7 +61,7 @@ def parse(tab):
             pass
         else :
             tab[4] = tab[4] + NP
-        TabInFile("resume.csv", tab)
+        TabInFile(prefix+"resume.csv", tab)
 
     # Vendor
     elif re.search(re.escape("vendor_info"), tab[3]):
@@ -76,7 +77,7 @@ def parse(tab):
             pass
         else :
             tab[4] = tab[4] + NP
-        TabInFile("resume.csv", tab)
+        TabInFile(prefix+"resume.csv", tab)
 
     # Client Handler
     elif re.search(re.escape("client_handler"), tab[3]):
@@ -90,7 +91,7 @@ def parse(tab):
             pass
         else :
             tab[4] = tab[4] + NP
-        TabInFile("resume.csv", tab, Skip=skip)
+        TabInFile(prefix+"resume.csv", tab, Skip=skip)
 
     # Device Controller
     elif re.search(re.escape("device_controller"), tab[3]):
@@ -110,7 +111,7 @@ def parse(tab):
             skip = True
         else :
             tab[4] = tab[4] + NP
-        TabInFile("resume.csv", tab, Skip=skip)
+        TabInFile(prefix+"resume.csv", tab, Skip=skip)
 
     # Server
     elif re.search(re.escape(".server.server"), tab[3]):
@@ -122,9 +123,9 @@ def parse(tab):
             tab[4] = "dashboard files detected for the Matter Server"
         else:
             tab[4] = tab[4] + NP
-        TabInFile("resume.csv", tab)
+        TabInFile(prefix+"resume.csv", tab)
 
     else :
-        with open("parsing/matter.txt", "a") as f:
+        with open(prefix+"parsing/matter.txt", "a") as f:
             writer = csv.writer(f)
             writer.writerow(tab)

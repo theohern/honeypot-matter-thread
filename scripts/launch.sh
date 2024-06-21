@@ -43,7 +43,7 @@ if [ ! -d venv ]; then
 	. ./venv/bin/activate
 	echo "intsalling docker for python..."
 	pip install docker < /dev/null 
-	cp ../basehttpadapter.py /home/user/honeypot-matter-thread/venv/lib/python3.11/site-packages/docker/transport
+	cp ../basehttpadapter.py /home/user/honeypot-matter-thread/venv/lib/python3.12/site-packages/docker/transport
 
 else
 	echo "python environement already exists..."
@@ -60,6 +60,8 @@ else
 fi
 
 cd /home/user/honeypot-matter-thread
-echo "Start running the honeypot"
-. ./venv/bin/activate
-./src/honeypot.sh &
+if [ "$1" != "no" ]; then
+	echo "Start running the honeypot"
+	. ./venv/bin/activate
+	./src/honeypot.sh 
+fi

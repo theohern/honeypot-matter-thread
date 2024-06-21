@@ -27,8 +27,15 @@ chmod 777 $dir/subscription.csv
 touch $dir/entity_log_entries.csv
 chmod 777 $dir/entity_log_entries.csv
 
-touch $dir/threadLogs.csv
-chmod 777 $dir/threadLogs.csv
+touch $dir/thread_logs.csv
+chmod 777 $dir/thread_logs.csv
 
-touch $dir/thread_node_activity.csv
-chmod 777 $dir/thread_node_activity.csv
+touch $dir/thread_nodes.csv
+chmod 777 $dir/thread_nodes.csv
+
+touch $dir/connection_attempts.csv
+chmod 777 $dir/connection_attempts.csv
+
+cd $dir
+mkdir parsing 
+mkdir matter
