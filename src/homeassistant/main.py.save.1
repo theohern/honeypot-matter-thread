@@ -1,0 +1,102 @@
+import csv
+import re
+import os
+from datetime import datetime
+
+allTab = []
+
+def TabInFile(file, tab, Skip=False):
+    if Skip:
+        with open("ha_bin.csv", "a") as f:
+            writer = csv.writer(f)
+            writer.writerow(tab)
+        return
+    with open(file, "a") as f:
+        writer = csv.writer(f)
+        writer.writerow(tab)
+
+def initFile(file):
+    with open(file, "w") as f:
+        f.write("Date, Thread, Type, Source, Info\n")
+
+def initLogs():
+    initFile("csv/ha_allLogs.csv")
+    initFile("csv/ha_warnings.csv")
+    initFile("csv/ha_errors.csv")
+
+def initCounts():
+    with open("csv/Source.csv", "w") as f:
+        f.write("Name, Count\n")
+    with open("csv/Type.csv", "w") as f:
+        f.write("Name, Count\n")
+    with open("csv/Thread.csv", "w") as f:
+        f.write("Name, Count\n")
+
+def UpdateInc(file, name):
+    with open(file, mode='r', newline='') as f:
+        reader = csv.reader(f)
+        rows = list(reader)
+
+    verbose_exists = False
+    for row in rows:
+        if row[0] == name:
+            row[1] = str(int(row[1]) + 1)
+            verbose_exists = True
+    if not verbose_exists:
+        rows.append([name, "1"])
+
+    with open(file, mode='w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(rows)
+
+def process_log_entry(string):
+    # Remove color codes
+    string = re.sub(r'\x1B\[\d+m', '', string)
+    # Parsing the string
+    string = string.rstrip('\n')
+    string = string.replace(",", ";")
+    parts = string.split(' ', 4)
+    # If the string does not have the expected parts, skip it
+    if len(parts) < 5:
+        return
+
+    date_str = parts[0] + ' ' + parts[1]
+    thread = parts[2].strip("()")
+    log_type = parts[3]
+    source_info = parts[4].split(' ', 1)
+    source = source_info[0].strip("[]")
+    info = source_info[1] if len(source_info) > 1 else ''
+
+    tab = [date_str, thread, log_type, source, info]
+
+    # Add the log in allLogs file
+    TabInFile("csv/allLogs.csv", tab)
+
+    # Update Source and Thread
+    UpdateInc("csv/Thread.csv", thread)
+    UpdateInc("csv/Type.csv", log_type)
+    UpdateInc("csv/Source.csv", source)
+
+    if "WARNING" in log_type:
+        with open("csv/warnings.csv", "a") as fwarnings:
+            writer = csv.writer(fwarnings)
+            writer.writerow(tab)
+    elif "ERROR" in log_type:
+        with open("csv/errors.csv", "a") as ferrors:
+            writer = csv.writer(ferrors)
+            writer.writerow(tab)
+    else:
+        if log_type not in allTab:
+            with open("NotParse.txt", "a") as f:
+                f.write(log_type + "\n")
+            allTab.append(log_type)
+
+def process_log_file(log_file_path):
+    with open(log_file_path, 'r') as file:
+        for line in file:
+            process_log_entry(line)
+
+if __name__ == "__main__":
+    initLogs()
+    initCounts()
+    process_log_file('/mnt/data/homeassistant.log')
