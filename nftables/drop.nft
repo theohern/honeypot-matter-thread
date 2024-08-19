@@ -1,0 +1,13 @@
+#!/usr/sbin/nft -f
+
+
+flush ruleset
+
+table bridge filter {
+	chain forward {
+		type filter hook forward priority 0; policy drop;
+		icmp type echo-reply ip saddr 192.168.1.13 counter accept
+		ct state established, related ip saddr 192.168.1.13 counter accept
+		ip daddr 192.168.1.13 tcp dport == {22,8123,5580,8080,8081} counter accept
+	} # 192.168.1.13 is the vm IP
+}

@@ -19,11 +19,10 @@ def capture_and_filter():
     # Start TShark process
     process = subprocess.Popen(TSHARK_CMD, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, bufsize=1)
 
-    # Open temporary CSV file for writing
+    # Open temporary CSV file
     with open(TEMP_CSV_FILE_PATH, mode='w', newline='') as temp_file:
         csv_writer = csv.writer(temp_file)
 
-        # Write the header
         csv_writer.writerow(['capture_time', 'frame.time_epoch', 'ip.src', 'ip.dst', 'tcp.srcport', 'tcp.dstport', 'protocol'])
 
         try:
@@ -53,7 +52,6 @@ def capture_and_filter():
             process.terminate()
 
 def merge_files():
-    # Check if the final CSV file exists
     if os.path.exists(FINAL_CSV_FILE_PATH):
         with open(FINAL_CSV_FILE_PATH, mode='a', newline='') as final_file:
             csv_writer = csv.writer(final_file)
@@ -65,7 +63,6 @@ def merge_files():
                 for row in csv_reader:
                     csv_writer.writerow(row)
     else:
-        # If the final file doesn't exist, rename the temp file to final file
         os.rename(TEMP_CSV_FILE_PATH, FINAL_CSV_FILE_PATH)
 
 if __name__ == '__main__':

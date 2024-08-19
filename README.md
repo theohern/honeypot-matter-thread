@@ -1,21 +1,12 @@
-# honeypot-matter-thread
-honeypot using Matter/Thread 
+# Honeypot using Matter over Thread protocol
 
-## network or IP changes
+The repository is the implementation of a hardware honeypot on IoT using Matter and Thread protocol. 
 
-change the IP of the "homeassistant" in the file /etc/hosts. \
-!! Do not change anything else !! 
 
-## Start the honeypot
+This work is a Master Thesis at the Université Catholique de Louvain-la-neuve. The final paper on the honeypot can be found [here](https://dial.uclouvain.be/downloader/downloader_thesis.php?pid=thesis:48935&datastream=PDF_01&key=cf241a3c7e86f747ad17d9816b7119a7). 
 
-### make sure that all containers are running
-There should be 9 containers running : 6 supervisors, 1 homeassistant ,1 addon_core_matter_server,  1 addon_core_openthread_router
+## Authors
 
-### start grafana 
-    sudo systemct restart grafana
+- [Theo Hernandez](https://github.com/theohern)
+- [Theophile Coche](https://github.com/tcoche)
 
-### initiate the files for the honeypot 
-    cd "/home/thernandez/honeypot-matter-thread/src" && sudo ./init.sh
-
-### start the honeypot 
-    sudo systemctl restart honeypot
